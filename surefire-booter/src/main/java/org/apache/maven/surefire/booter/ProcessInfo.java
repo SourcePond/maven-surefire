@@ -19,29 +19,44 @@ package org.apache.maven.surefire.booter;
  * under the License.
  */
 
-import junit.framework.JUnit4TestAdapter;
-import junit.framework.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
 /**
- * Adapt the JUnit4 tests which use only annotations to the JUnit3 test suite.
+ * PID, PPID, elapsed time (Unix) or start time (Windows).
  *
- * @author Tibor Digana (tibor17)
- * @since 2.19
+ * @author <a href="mailto:tibordigana@apache.org">Tibor Digana (tibor17)</a>
+ * @since 2.20.1
  */
-@Suite.SuiteClasses( {
-    ClasspathTest.class,
-    CommandReaderTest.class,
-    PropertiesWrapperTest.class,
-    SurefireReflectorTest.class,
-    PpidCheckerTest.class
-} )
-@RunWith( Suite.class )
-public class JUnit4SuiteTest
+final class ProcessInfo
 {
-    public static Test suite()
+    static final ProcessInfo INVALID_PROCESS_INFO = new ProcessInfo( null, null, null );
+
+    private final String pid;
+    private final Object time;
+    private final String ppid;
+
+    ProcessInfo( String pid, Object time, String ppid )
     {
-        return new JUnit4TestAdapter( JUnit4SuiteTest.class );
+        this.pid = pid;
+        this.time = time;
+        this.ppid = ppid;
+    }
+
+    boolean isValid()
+    {
+        return pid != null && time != null;
+    }
+
+    String getPID()
+    {
+        return pid;
+    }
+
+    Object getTime()
+    {
+        return time;
+    }
+
+    String getPPID()
+    {
+        return ppid;
     }
 }
